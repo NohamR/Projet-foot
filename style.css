@@ -1,0 +1,52 @@
+h1 {
+    font-family: FreeMono, monospace; 
+    text-align: center;
+    font-size: 50px;
+    color: white;
+}
+
+body{
+  background-image:url('/Arriereplan.jpg');
+  background-size: cover;
+}
+h2{
+    font-family: Comic Sans MS, Comic Sans, cursive; 
+    text-align: center;
+    font-size: 22px;
+    color:white; 
+}
+h3{
+    font-family: Brush Script MT, Brush Script Std, cursive;
+    color : white;
+    font-size:29px;
+    text-align: center;
+}
+
+#acc{
+    margin-left: 5%;
+    margin-top: 7%;
+    width: 375px;
+    height: 425px;
+    border-radius: 20px;
+    border-style: solid;
+    border-color: black;
+    background-color: rgba(66, 66, 88, 0.5);
+}
+img{
+    width: 400px;
+    height: 300px;
+}
+
+button{
+    width: 200px;
+    height:80px;
+    margin-left: 65%;
+    margin-top: 8%;
+    font-size: 28px;
+    border-radius: 20px;
+    background-color: rgba(80, 203, 40, 0.5);
+}
+
+table{
+    margin-left: 20% ;
+}
