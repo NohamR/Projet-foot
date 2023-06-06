@@ -33,14 +33,14 @@ COEUR_HEIGHT = COEUR_WIDTH*(440/512)
 nbcoeur = 1
 
 # Images choisies
-player_image = pygame.transform.scale(pygame.image.load("V5/joueur.png"), (PLAYER_WIDTH, PLAYER_HEIGHT)) # Au cas où l'image fait pas la bonne taille
+player_image = pygame.transform.scale(pygame.image.load("V5.6/joueur.png"), (PLAYER_WIDTH, PLAYER_HEIGHT)) # Au cas où l'image fait pas la bonne taille
 
-ball_image = pygame.transform.scale(pygame.image.load("V5/balle.png"), (BALL_WIDTH, BALL_HEIGHT)) 
+ball_image = pygame.transform.scale(pygame.image.load("V5.6/balle.png"), (BALL_WIDTH, BALL_HEIGHT)) 
 
-coeur_image = pygame.transform.scale(pygame.image.load("V5/coeur.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
-coeurfaded_image = pygame.transform.scale(pygame.image.load("V5/coeurfaded.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
+coeur_image = pygame.transform.scale(pygame.image.load("V5.6/coeur.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
+coeurfaded_image = pygame.transform.scale(pygame.image.load("V5.6/coeurfaded.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
 
-background_image = pygame.transform.scale(pygame.image.load("V5/terrain.png"), (WIDTH, HEIGHT))
+background_image = pygame.transform.scale(pygame.image.load("V5.6/terrain.png"), (WIDTH, HEIGHT))
 
 
 listex = [110, 230, 350, 470, 590, 110, 230, 350, 470, 590]
@@ -52,7 +52,7 @@ selected_sprite = None # Le sprite choisi
 
 # Charger les 10 sprites
 for i in range(10):
-    sprite_image = pygame.transform.scale(pygame.image.load(f"V5.5/{i+1}.png"), (SPRITE_WIDTH, SPRITE_HEIGHT))
+    sprite_image = pygame.transform.scale(pygame.image.load(f"V5.6/{i+1}.png"), (SPRITE_WIDTH, SPRITE_HEIGHT))
     sprites.append(sprite_image)
     sprite_rect = sprite_image.get_rect()
     sprite_rect.topleft = (listex[i], listey[i])  # Définir les coordonnées du sprite
@@ -80,7 +80,7 @@ nbrotation = 0
 
 # Initialisation de l'écran de jeu
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Jeu V5.5")
+pygame.display.set_caption("Jeu V5.6")
 
 
 def start_screen():
@@ -101,7 +101,7 @@ def start_screen():
                 return selected_sprite
             
             elif event.type == MOUSEBUTTONDOWN and event.button == 1:  # Clic gauche de la souris
-                print("L'utilisateur a cliqué")
+                # print("L'utilisateur a cliqué")
                 mouse_pos = pygame.mouse.get_pos()
 
                 if start_text_rect.collidepoint(mouse_pos):
@@ -129,10 +129,10 @@ def game(i):
     global score, nbcoeur
     
     if i != 0:
-        player_image = pygame.transform.scale(pygame.image.load(f"V5.5/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
+        player_image = pygame.transform.scale(pygame.image.load(f"V5.6/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
     else:
         i = 0
-        player_image = pygame.transform.scale(pygame.image.load(f"V5.5/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
+        player_image = pygame.transform.scale(pygame.image.load(f"V5.6/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
 
     # Position initiale de la balle
     ball_pos = [WIDTH // 2, BALL_RADIUS]
