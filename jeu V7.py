@@ -4,6 +4,7 @@ import sys
 from pygame.locals import *
 import csv
 from math import *
+import os
 
 pygame.init()
 
@@ -39,16 +40,16 @@ SMILEY_WIDTH = 150
 SMILEY_HEIGHT = SMILEY_WIDTH
 
 # Images choisies
-player_image = pygame.transform.scale(pygame.image.load("V5.6/joueur.png"), (PLAYER_WIDTH, PLAYER_HEIGHT)) # Au cas où l'image fait pas la bonne taille
+player_image = pygame.transform.scale(pygame.image.load("assets/joueur.png"), (PLAYER_WIDTH, PLAYER_HEIGHT)) # Au cas où l'image fait pas la bonne taille
 
-ball_image = pygame.transform.scale(pygame.image.load("V5.6/balle.png"), (BALL_WIDTH, BALL_HEIGHT)) 
+ball_image = pygame.transform.scale(pygame.image.load("assets/balle.png"), (BALL_WIDTH, BALL_HEIGHT)) 
 
-coeur_image = pygame.transform.scale(pygame.image.load("V5.6/coeur.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
-coeurfaded_image = pygame.transform.scale(pygame.image.load("V5.6/coeurfaded.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
+coeur_image = pygame.transform.scale(pygame.image.load("assets/coeur.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
+coeurfaded_image = pygame.transform.scale(pygame.image.load("assets/coeurfaded.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
 
-smiley_image = pygame.transform.scale(pygame.image.load("V5.6/smiley.png"), (SMILEY_WIDTH, SMILEY_HEIGHT)) 
+smiley_image = pygame.transform.scale(pygame.image.load("assets/smiley.png"), (SMILEY_WIDTH, SMILEY_HEIGHT)) 
 
-background_image = pygame.transform.scale(pygame.image.load("V5.6/terrain.png"), (WIDTH, HEIGHT))
+background_image = pygame.transform.scale(pygame.image.load("assets/terrain.png"), (WIDTH, HEIGHT))
 
 pygame.display.set_icon(ball_image)
 
@@ -61,7 +62,7 @@ selected_sprite = None # Le sprite choisi
 
 # Charger les 10 sprites
 for i in range(10):
-    sprite_image = pygame.transform.scale(pygame.image.load(f"V5.6/{i+1}.png"), (SPRITE_WIDTH, SPRITE_HEIGHT))
+    sprite_image = pygame.transform.scale(pygame.image.load(f"assets/{i+1}.png"), (SPRITE_WIDTH, SPRITE_HEIGHT))
     sprites.append(sprite_image)
     sprite_rect = sprite_image.get_rect()
     sprite_rect.topleft = (listex[i], listey[i])  # Définir les coordonnées du sprite
@@ -69,7 +70,7 @@ for i in range(10):
 
 # Charger une musique parmis la super compilation
 i = random.randint(0, 16)
-path = 'V5.6/output_folder/mp3/'
+path = 'assets/mp3/'
 musique = path + str(i) + '.mp3'
 pygame.mixer.music.load(musique)
 
@@ -85,7 +86,7 @@ y_rectangle = 0  # En haut de l'écran
 def openuseragents(file: str):
     with open(file, newline='') as csvfile:
         return [row for row in csv.DictReader(csvfile, delimiter=';')][0]
-stats = openuseragents('V5.6/.logs.csv')
+stats = openuseragents('assets/.logs.csv')
 
 # Variables du jeu
 score = 0
@@ -95,7 +96,7 @@ nbrotation = 0
 rotate = 0
 # Initialisation de l'écran de jeu
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Jeu V7")
+pygame.display.set_caption("Projet-foot V7")
 
 
 def start_screen():
@@ -148,10 +149,10 @@ def game(i):
     global score, nbcoeur
     
     if i != None:
-        player_image = pygame.transform.scale(pygame.image.load(f"V5.6/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
+        player_image = pygame.transform.scale(pygame.image.load(f"assets/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
     else:
         i = 0
-        player_image = pygame.transform.scale(pygame.image.load(f"V5.6/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
+        player_image = pygame.transform.scale(pygame.image.load(f"assets/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
 
     # Position initiale de la balle
     ball_pos = [WIDTH // 2, BALL_RADIUS]
@@ -271,7 +272,13 @@ def game_over_screen(score):
     # screen.blit(perdu_text, perdu_text_rect)
 
     screen.blit(smiley_image, ((WIDTH // 2)-SMILEY_WIDTH/2, (HEIGHT // 2)-SPRITE_HEIGHT/2)) # Le smiley
-    moy = floor(100*( (int(stats['moy'])*int(stats['nbparties'])) + (score) )/(int(stats['nbparties'])+1))/100
+
+    moy = float(stats['moy'])
+    nbparties = float()
+
+    dec = (( moy * nbparties ) + score) / (nbparties + 1)
+    moy = floor(100 * dec ) / 100
+
     texte = "Perdu\n Votre score était de : " + str(score) + "\n Le score moyen est de : " + str(moy) + '\n Votre meilleur score était de : ' + str(stats['best'])
     lignes = texte.split("\n")  # Diviser le texte en lignes
     y = 50  # Position y initiale du texte
@@ -291,11 +298,15 @@ def game_over_screen(score):
     l1 = 'score;moy;best;nbparties'
     l2 = str(str(score) + ';' + str(moy) + ';' +  str(best) + ';' + str((int(stats['nbparties'])+1)))
 
-    with open('.logs.csv', "a") as f:
-                f.write(l1 + '\n' + l2)
+    try:
+        os.remove('assets/.logs.csv')
+        with open('assets/.logs.csv', "a") as f:
+                    f.write(l1 + '\n' + l2 + '\n')
+    except Exception as e:
+        print(e)
 
     pygame.display.flip()
-    pygame.time.wait(5000)
+    pygame.time.wait(3000)
 
 
 def replay_screen():
@@ -364,7 +375,7 @@ while running:
     game_over = game(selected_skin)
     print(game_over)
     if game_over[0] == False:
-        game_over_screen(score)
+        game_over_screen(game_over[1])
         change = replay_screen()
         print(change)
         if change == False:
