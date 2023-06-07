@@ -2,6 +2,8 @@ import pygame
 import random
 import sys
 from pygame.locals import *
+import csv
+from math import *
 
 pygame.init()
 
@@ -33,7 +35,7 @@ COEUR_HEIGHT = COEUR_WIDTH*(440/512)
 nbcoeur = 1
 
 # Paramètre du smiley
-SMILEY_WIDTH = 300
+SMILEY_WIDTH = 150
 SMILEY_HEIGHT = SMILEY_WIDTH
 
 # Images choisies
@@ -79,15 +81,21 @@ hauteur_rectangle = 40
 x_rectangle = (WIDTH - largeur_rectangle) // 2  # Au milieu horizontalement
 y_rectangle = 0  # En haut de l'écran
 
+# Charge les scores précédents
+def openuseragents(file: str):
+    with open(file, newline='') as csvfile:
+        return [row for row in csv.DictReader(csvfile, delimiter=';')][0]
+stats = openuseragents('V5.6/.logs.csv')
+
 # Variables du jeu
 score = 0
 font = pygame.font.Font(None, 36)
 dercolsol = 0
 nbrotation = 0
-
+rotate = 0
 # Initialisation de l'écran de jeu
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Jeu V5.6")
+pygame.display.set_caption("Jeu V7")
 
 
 def start_screen():
@@ -121,9 +129,7 @@ def start_screen():
             # Dessiner le rectangle autour du sprite sélectionné
             if selected_sprite is not None and selected_sprite == i:
                 pygame.draw.rect(screen, GRIS, sprite_rects[i], 2)
-
-
-            police = pygame.font.Font(None, 24)
+            
             texte = "Choisissez le skin de votre choix avec la souris\nAppuyer sur n'importe quelle touche pour commencer la partie\nBonne chance !"
             lignes = texte.split("\n")  # Diviser le texte en lignes
             y = 50  # Position y initiale du texte
@@ -161,6 +167,7 @@ def game(i):
     running = True
     dercolsol = 0
     nbrotation = 0
+    rotate = 0
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -205,7 +212,7 @@ def game(i):
 
                 else:
                     print(nbcoeur)
-                    return False
+                    return (False, score)
                     pass
             
             if current_time - dercolsol <= 1000:
@@ -255,19 +262,40 @@ def game(i):
         pygame.display.flip()
         clock.tick(60)
 
-def game_over_screen():
+def game_over_screen(score):
     screen.fill(BLACK)
-    perdu_text = font.render("Perdu", True, WHITE)
-    perdu_text_rect = perdu_text.get_rect()
-    perdu_text_rect.centerx = WIDTH // 2
-    perdu_text_rect.centery = HEIGHT // 5
-    screen.blit(perdu_text, perdu_text_rect)
+    # perdu_text = font.render("Perdu", True, WHITE)
+    # perdu_text_rect = perdu_text.get_rect()
+    # perdu_text_rect.centerx = WIDTH // 2
+    # perdu_text_rect.centery = HEIGHT // 5
+    # screen.blit(perdu_text, perdu_text_rect)
 
     screen.blit(smiley_image, ((WIDTH // 2)-SMILEY_WIDTH/2, (HEIGHT // 2)-SPRITE_HEIGHT/2)) # Le smiley
+    moy = floor(100*( (int(stats['moy'])*int(stats['nbparties'])) + (score) )/(int(stats['nbparties'])+1))/100
+    texte = "Perdu\n Votre score était de : " + str(score) + "\n Le score moyen est de : " + str(moy) + '\n Votre meilleur score était de : ' + str(stats['best'])
+    lignes = texte.split("\n")  # Diviser le texte en lignes
+    y = 50  # Position y initiale du texte
+    print(stats)
+    for ligne in lignes:
+        y += 30  # Augmenter la position y pour la prochaine ligne
+
+        text = font.render(ligne, True, WHITE)
+        text_rect = text.get_rect()
+        text_rect.center = (WIDTH // 2, y)
+        screen.blit(text, text_rect) # Le score
+    if score >= int(stats['best']):
+        best = score
+    else:
+        best = stats['best']
+
+    l1 = 'score;moy;best;nbparties'
+    l2 = str(str(score) + ';' + str(moy) + ';' +  str(best) + ';' + str((int(stats['nbparties'])+1)))
+
+    with open('.logs.csv', "a") as f:
+                f.write(l1 + '\n' + l2)
 
     pygame.display.flip()
-    # pygame.time.wait(3000)
-    replay_screen()
+    pygame.time.wait(5000)
 
 
 def replay_screen():
@@ -335,7 +363,8 @@ while running:
     nbrotation = 0
     game_over = game(selected_skin)
     print(game_over)
-    if game_over == False:
+    if game_over[0] == False:
+        game_over_screen(score)
         change = replay_screen()
         print(change)
         if change == False:
