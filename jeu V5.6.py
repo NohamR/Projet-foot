@@ -32,6 +32,10 @@ COEUR_WIDTH = 75
 COEUR_HEIGHT = COEUR_WIDTH*(440/512)
 nbcoeur = 1
 
+# Paramètre du smiley
+SMILEY_WIDTH = 300
+SMILEY_HEIGHT = SMILEY_WIDTH
+
 # Images choisies
 player_image = pygame.transform.scale(pygame.image.load("V5.6/joueur.png"), (PLAYER_WIDTH, PLAYER_HEIGHT)) # Au cas où l'image fait pas la bonne taille
 
@@ -40,8 +44,11 @@ ball_image = pygame.transform.scale(pygame.image.load("V5.6/balle.png"), (BALL_W
 coeur_image = pygame.transform.scale(pygame.image.load("V5.6/coeur.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
 coeurfaded_image = pygame.transform.scale(pygame.image.load("V5.6/coeurfaded.png"), (COEUR_WIDTH, COEUR_HEIGHT)) 
 
+smiley_image = pygame.transform.scale(pygame.image.load("V5.6/smiley.png"), (SMILEY_WIDTH, SMILEY_HEIGHT)) 
+
 background_image = pygame.transform.scale(pygame.image.load("V5.6/terrain.png"), (WIDTH, HEIGHT))
 
+pygame.display.set_icon(ball_image)
 
 listex = [110, 230, 350, 470, 590, 110, 230, 350, 470, 590]
 listey = [190, 190, 190, 190, 190, 310, 310, 310, 310, 310]
@@ -59,7 +66,7 @@ for i in range(10):
     sprite_rects.append(sprite_rect)
 
 # Charger une musique parmis la super compilation
-i = random.randint(0, 17)
+i = random.randint(0, 16)
 path = 'V5.6/output_folder/mp3/'
 musique = path + str(i) + '.mp3'
 pygame.mixer.music.load(musique)
@@ -128,7 +135,7 @@ def start_screen():
 def game(i):
     global score, nbcoeur
     
-    if i != 0:
+    if i != None:
         player_image = pygame.transform.scale(pygame.image.load(f"V5.6/{i+1}.png"), (PLAYER_WIDTH, PLAYER_HEIGHT))
     else:
         i = 0
@@ -239,11 +246,15 @@ def game_over_screen():
     perdu_text = font.render("Perdu", True, WHITE)
     perdu_text_rect = perdu_text.get_rect()
     perdu_text_rect.centerx = WIDTH // 2
-    perdu_text_rect.centery = HEIGHT // 2
+    perdu_text_rect.centery = HEIGHT // 5
     screen.blit(perdu_text, perdu_text_rect)
+
+    screen.blit(smiley_image, ((WIDTH // 2)-SMILEY_WIDTH/2, (HEIGHT // 2)-SPRITE_HEIGHT/2)) # Le smiley
+
     pygame.display.flip()
     pygame.time.wait(3000)
 
+                
 # Boucle principale
 running = True
 while running:
