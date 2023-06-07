@@ -1,27 +1,28 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-    <link rel = "stylesheet" href = "src/style.css">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <link rel="stylesheet" href="src/style.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 <body>
-    <h1> Accueil</h1>
-    <h2>Montez le son pour plus de sensations !</h2>
-    <table>
-        <tr>
-            <td><div id = "acc">
-                <h2> Jeu de jongles : Positionnez votre personnage sous la balle avant qu'elle ne touche le sol afin de marquer le plus de point possibles et espérer égaler le record de jongles de Neymar Jr (400 jongles en 1 minute). </h2>
-                <h3>"Il n'y a pas d'endroit dans le monde où l'homme est plus heureux que dans un stade de football." Albert Camus</h3>
-            </div>
-            </td>
-            <td><img src = 'src/neymar.jpg'></td>
-        </tr>
-    </table>
-    <a href="releases/V7.zip" style="text-decoration: none; color: white;"><button name = 'bouton' type="submit">Commencer !</button></a>
-    <audio controls autoplay style="display: none;">
-        <source src="src/musique.mp3" type="audio/mp3">
-        Votre navigateur ne prend pas en charge l'élément audio.
-      </audio></body>
+  <h1>Accueil</h1>
+  <h2>Montez le son pour plus de sensations !</h2>
+  <div class="container">
+    <div class="quote">
+        <h2> Jeu de jongles : Positionnez votre personnage sous la balle avant qu'elle ne touche le sol afin de marquer le plus de point possibles et espérer égaler le record de jongles de Neymar Jr (400 jongles en 1 minute). </h2>
+        <h2>"Il n'y a pas d'endroit dans le monde où l'homme est plus heureux que dans un stade de football." - Albert Camus</h2>
+    </div>
+    <div class="image-container">
+      <img src="src/neymar.jpg" alt="Neymar Jr">
+    </div>
+    <a href="V7.zip" class="play-button"><h2>Jouer !</h2></a>
+  </div>
+  <audio controls autoplay style="display: none;">
+    <source src="src/musique.mp3" type="audio/mp3">
+    Votre navigateur ne prend pas en charge l'élément audio.
+  </audio>
+</body>
 </html>
